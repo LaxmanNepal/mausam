@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ne">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>मौसम — नेपालको स्मार्ट मौसम</title>
+<meta name="description" content="नेपालका शहर, गाउँपालिका र जिल्लाको स्मार्ट मौसम जानकारी। तापक्रम, वर्षा, हावा, वायु गुणस्तर, UV, घण्टे तथा ७ दिने पूर्वानुमान।">
+<meta name="theme-color" content="#0f6fff">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar"><div class="nav">
+<a class="brand" href="#"><span class="brand-icon">🌦️</span><span><b>मौसम</b><small>नेपालको स्मार्ट मौसम</small></span></a>
+<div class="nav-actions"><button id="locBtn" class="icon-btn" title="मेरो स्थान">📍</button><button id="themeBtn" class="icon-btn" title="थिम">◐</button><button id="shareBtn" class="icon-btn" title="साझा गर्नुहोस्">↗</button></div>
+</div></header>
+<main>
+<section class="search-wrap"><div class="search"><span>⌕</span><input id="search" placeholder="शहर, गाउँपालिका, जिल्ला खोज्नुहोस्…" autocomplete="off"><button id="clear">×</button></div><div id="results" class="results"></div><div class="chips" id="quick"><button data-q="काठमाडौं">काठमाडौं</button><button data-q="पोखरा">पोखरा</button><button data-q="हेटौंडा">हेटौंडा</button><button data-q="विराटनगर">विराटनगर</button><button data-q="नेपालगञ्ज">नेपालगञ्ज</button></div></section>
+<section id="loading" class="loading hidden"><div class="spinner"></div><p>मौसमको जानकारी ल्याउँदैछ…</p></section>
+<section id="empty" class="empty"><div>🌄</div><h1>तपाईंको ठाउँको मौसम जान्नुहोस्</h1><p>स्थान खोज्नुहोस् वा आफ्नो हालको स्थान प्रयोग गर्नुहोस्।</p><button id="emptyLoc" class="primary">📍 मेरो स्थान प्रयोग गर्नुहोस्</button></section>
+<section id="app" class="hidden">
+<div class="hero" id="hero"><div class="hero-top"><div><span class="eyebrow">अहिलेको मौसम</span><h1 id="place">—</h1><p id="updated">—</p></div><div id="weatherIcon" class="big-icon">☀️</div></div><div class="hero-main"><div><span id="temp" class="temp">—°</span><p id="condition">—</p><p>महसुस: <b id="feels">—°</b></p></div><div class="hero-stats"><div><span>अधिकतम</span><b id="high">—°</b></div><div><span>न्यूनतम</span><b id="low">—°</b></div><div><span>वर्षा सम्भावना</span><b id="rain">—%</b></div><div><span>आर्द्रता</span><b id="humidity">—%</b></div></div></div><div class="hero-footer"><span id="advice">💡 —</span><span id="sun">☀️ — · 🌙 —</span></div></div>
+<div class="unique-grid"><article class="smart-card"><span>🎯</span><div><small>मौसम स्कोर</small><strong id="score">—/100</strong><p id="scoreText">—</p></div></article><article class="smart-card"><span>☔</span><div><small>छाता चाहिन्छ?</small><strong id="umbrella">—</strong><p id="umbrellaText">—</p></div></article><article class="smart-card"><span>🚗</span><div><small>यात्रा अवस्था</small><strong id="travel">—</strong><p id="travelText">—</p></div></article><article class="smart-card"><span>👕</span><div><small>आज के लगाउने?</small><strong id="clothes">—</strong><p id="clothesText">—</p></div></article></div>
+<section class="card"><div class="section-head"><h2>आजको मौसम घडी</h2><button class="text-btn" id="nowBtn">अहिले</button></div><div id="hourly" class="hourly"></div></section>
+<section class="card"><div class="section-head"><h2>वर्षा कहिले?</h2><span id="rainWindow" class="pill">विश्लेषण हुँदैछ</span></div><div class="rain-chart" id="rainChart"></div><p class="muted" id="rainNote">आगामी घण्टाको वर्षा सम्भावना र परिमाणबाट अनुमान।</p></section>
+<section class="card"><div class="section-head"><h2>वायु गुणस्तर</h2><span id="aqiBadge" class="pill">—</span></div><div class="aq-grid"><div><span>PM2.5</span><b id="pm25">—</b><small>µg/m³</small></div><div><span>PM10</span><b id="pm10">—</b><small>µg/m³</small></div><div><span>युरोपेली AQI</span><b id="aqi">—</b><small id="aqiText">—</small></div><div><span>UV सूचक</span><b id="uv">—</b><small id="uvText">—</small></div></div></section>
+<section class="card"><div class="section-head"><h2>७ दिनको पूर्वानुमान</h2><span class="pill">दैनिक</span></div><div id="daily" class="daily"></div></section>
+<section class="card"><div class="section-head"><h2>विस्तृत जानकारी</h2></div><div class="details"><div>🌡️ <span>तापक्रम</span><b id="dTemp">—</b></div><div>💧 <span>आर्द्रता</span><b id="dHum">—</b></div><div>💨 <span>हावाको गति</span><b id="wind">—</b></div><div>🧭 <span>हावाको दिशा</span><b id="windDir">—</b></div><div>🫧 <span>वायुदाब</span><b id="pressure">—</b></div><div>👁️ <span>दृश्यता</span><b id="visibility">—</b></div><div>☁️ <span>बादल</span><b id="cloud">—</b></div><div>💦 <span>ओसांक</span><b id="dew">—</b></div></div></section>
+<section class="card compare"><div class="section-head"><h2>शहर तुलना</h2><button id="addCompare" class="text-btn">+ शहर थप्नुहोस्</button></div><div id="compareList" class="compare-list"><div class="muted">दुई वा बढी स्थान खोजेपछि यहाँ तुलना देखिन्छ।</div></div></section>
+<section class="card tips"><h2>आजको मौसमको सरल कथा</h2><p id="story">—</p><div class="tip-row"><span>🌱 किसान</span><p id="farmTip">—</p></div><div class="tip-row"><span>🏃 स्वास्थ्य</span><p id="healthTip">—</p></div></section>
+</section>
+</main>
+<footer><b>🌦️ मौसम</b><span>सरल मौसम, नेपालीमा</span><span>डाटा: Open-Meteo · स्थान: OpenStreetMap</span></footer>
+<script src="app.js"></script>
+</body></html>
