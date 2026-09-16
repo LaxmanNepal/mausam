@@ -16,6 +16,7 @@
 <div class="nav-search"><span>⌕</span><input id="navSearch" type="search" placeholder="शहर / जिल्ला खोज्नुहोस्…" autocomplete="off"><button id="navSearchClear" aria-label="खोजी हटाउनुहोस्">×</button></div>
 <div class="nav-actions"><button id="allBtn" class="nav-all" title="सम्पूर्ण मौसम खण्डहरू">सम्पूर्ण</button><button id="locBtn" class="icon-btn" title="मेरो स्थान">📍</button><button id="themeBtn" class="icon-btn" title="थिम">◐</button><button id="shareBtn" class="icon-btn" title="साझा गर्नुहोस्">↗</button></div>
 </div><div id="navResults" class="nav-results"></div><div id="allMenu" class="all-menu" hidden><b>सम्पूर्ण मौसम</b><div><a href="#districtExplorer">🇳🇵 ७७ जिल्ला एक्सप्लोरर</a><a href="#nationalPulse">🇳🇵 नेपालको मौसम अवस्था</a><a href="#intelligence">🌦️ Weather Intelligence Center</a></div><button id="showNationalBtn">यी ३ खण्ड देखाउनुहोस्</button></div></header>
+<section class="nepali-clock" aria-label="नेपालको मिति र समय"><div class="np-date-block"><span class="np-label">🇳🇵 आजको नेपाली मिति</span><strong id="npDate">मिति लोड हुँदैछ…</strong><small id="adDate">—</small></div><div class="np-time-block"><span class="np-label">🕐 नेपाल समय</span><strong id="npTime">—</strong><small id="npTimeSub">Asia/Kathmandu</small></div></section>
 <div class="utility-bar"><span id="liveClock">समय हेर्दै…</span><span id="networkStatus">🟢 अनलाइन</span><button id="installBtn" hidden>📲 एप राख्नुहोस्</button><button id="topBtn" aria-label="माथि जानुहोस्">↑</button></div>
 <main>
 <section class="search-wrap"><div class="search"><span>⌕</span><input id="search" placeholder="शहर, गाउँपालिका, जिल्ला खोज्नुहोस्…" autocomplete="off"><button id="clear">×</button></div><div id="results" class="results"></div><div class="chips" id="quick"><button data-q="काठमाडौं">काठमाडौं</button><button data-q="पोखरा">पोखरा</button><button data-q="हेटौंडा">हेटौंडा</button><button data-q="विराटनगर">विराटनगर</button><button data-q="नेपालगञ्ज">नेपालगञ्ज</button></div></section>
@@ -35,5 +36,5 @@
 </section>
 </main>
 <footer><b>🌦️ मौसम</b><span>सरल मौसम, नेपालीमा</span><span>डाटा: Open-Meteo · स्थान: OpenStreetMap</span></footer>
-<script src="resilience.js"></script><script src="api-compat.js"></script><script src="app.js"></script><script src="enhancements.js"></script><script src="districts.js"></script><script src="intelligence.js"></script><script src="national.js"></script>
+<script src="resilience.js"></script><script src="api-compat.js"></script><script src="nepali-clock.js"></script><script src="app.js"></script><script src="enhancements.js"></script><script src="districts.js"></script><script src="intelligence.js"></script><script src="national.js"></script>
 </body></html>
