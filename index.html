@@ -18,6 +18,7 @@
 <div class="utility-bar"><span id="liveClock">समय हेर्दै…</span><span id="networkStatus">🟢 अनलाइन</span><button id="installBtn" hidden>📲 एप राख्नुहोस्</button><button id="topBtn" aria-label="माथि जानुहोस्">↑</button></div>
 <main>
 <section class="search-wrap"><div class="search"><span>⌕</span><input id="search" placeholder="शहर, गाउँपालिका, जिल्ला खोज्नुहोस्…" autocomplete="off"><button id="clear">×</button></div><div id="results" class="results"></div><div class="chips" id="quick"><button data-q="काठमाडौं">काठमाडौं</button><button data-q="पोखरा">पोखरा</button><button data-q="हेटौंडा">हेटौंडा</button><button data-q="विराटनगर">विराटनगर</button><button data-q="नेपालगञ्ज">नेपालगञ्ज</button></div></section>
+<section class="card district-explorer" id="districtExplorer"><div class="section-head"><div><h2>🇳🇵 नेपाल ७७ जिल्ला मौसम एक्सप्लोरर</h2><p class="muted">प्रदेश छान्नुहोस् वा जिल्ला खोज्नुहोस्।</p></div><span id="districtCount" class="pill">७७ जिल्ला</span></div><div id="provinceTabs" class="district-tabs"></div><div class="district-search"><span>⌕</span><input id="districtSearch" placeholder="जिल्लाको नाम खोज्नुहोस्…" autocomplete="off"></div><div id="districtGrid" class="district-grid"></div></section>
 <section id="loading" class="loading hidden"><div class="spinner"></div><p>मौसमको जानकारी ल्याउँदैछ…</p></section>
 <section id="empty" class="empty"><div>🌄</div><h1>तपाईंको ठाउँको मौसम जान्नुहोस्</h1><p>स्थान खोज्नुहोस् वा आफ्नो हालको स्थान प्रयोग गर्नुहोस्।</p><button id="emptyLoc" class="primary">📍 मेरो स्थान प्रयोग गर्नुहोस्</button></section>
 <section id="app" class="hidden">
@@ -33,5 +34,5 @@
 </section>
 </main>
 <footer><b>🌦️ मौसम</b><span>सरल मौसम, नेपालीमा</span><span>डाटा: Open-Meteo · स्थान: OpenStreetMap</span></footer>
-<script src="app.js"></script><script src="enhancements.js"></script>
+<script src="app.js"></script><script src="enhancements.js"></script><script src="districts.js"></script>
 </body></html>
