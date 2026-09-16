@@ -1,0 +1,16 @@
+(()=>{'use strict';
+const districts={
+'कोशी प्रदेश':['ताप्लेजुङ','पाँचथर','इलाम','झापा','मोरङ','सुनसरी','धनकुटा','तेह्रथुम','संखुवासभा','भोजपुर','सोलुखुम्बु','ओखलढुंगा','खोटाङ','उदयपुर'],
+'मधेश प्रदेश':['सप्तरी','सिराहा','धनुषा','महोत्तरी','सर्लाही','रौतहट','बारा','पर्सा'],
+'बागमती प्रदेश':['दोलखा','रामेछाप','सिन्धुली','काभ्रेपलाञ्चोक','सिन्धुपाल्चोक','रसुवा','नुवाकोट','धादिङ','काठमाडौं','भक्तपुर','ललितपुर','मकवानपुर','चितवन'],
+'गण्डकी प्रदेश':['गोरखा','मनाङ','मुस्ताङ','म्याग्दी','कास्की','लमजुङ','तनहुँ','नवलपुर','स्याङ्जा','पर्वत','बागलुङ'],
+'लुम्बिनी प्रदेश':['रुकुम पूर्व','रोल्पा','प्यूठान','गुल्मी','अर्घाखाँची','पाल्पा','नवलपरासी पश्चिम','रुपन्देही','कपिलवस्तु','दाङ','बाँके','बर्दिया'],
+'कर्णाली प्रदेश':['डोल्पा','मुगु','हुम्ला','जुम्ला','कालिकोट','दैलेख','जाजरकोट','रुकुम पश्चिम','सल्यान','सुर्खेत'],
+'सुदूरपश्चिम प्रदेश':['बझाङ','बाजुरा','अछाम','डोटी','डडेलधुरा','बैतडी','दार्चुला','कञ्चनपुर','कैलाली']};
+const all=Object.values(districts).flat();
+function boot(){const host=document.getElementById('districtExplorer');if(!host)return;const input=document.getElementById('districtSearch'),tabs=document.getElementById('provinceTabs'),grid=document.getElementById('districtGrid'),count=document.getElementById('districtCount');let active='सबै';
+ tabs.innerHTML=['सबै',...Object.keys(districts)].map(x=>`<button class="district-tab ${x==='सबै'?'active':''}" data-p="${x}">${x}</button>`).join('');
+ function render(){const q=(input.value||'').trim().toLocaleLowerCase('ne');const list=(active==='सबै'?all:districts[active]).filter(x=>!q||x.toLocaleLowerCase('ne').includes(q));count.textContent=`${list.length} जिल्ला`;grid.innerHTML=list.map(x=>`<button class="district-card" data-name="${x}"><span>📍</span><b>${x}</b><small>मौसम हेर्नुहोस् →</small></button>`).join('')||'<div class="muted district-empty">जिल्ला भेटिएन।</div>';grid.querySelectorAll('.district-card').forEach(b=>b.onclick=()=>{const s=document.getElementById('search');s.value=b.dataset.name;s.focus();s.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',code:'Enter',bubbles:true}));window.scrollTo({top:0,behavior:'smooth'})})}
+ tabs.onclick=e=>{const b=e.target.closest('[data-p]');if(!b)return;active=b.dataset.p;tabs.querySelectorAll('.district-tab').forEach(x=>x.classList.toggle('active',x===b));render()};input.oninput=render;render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
