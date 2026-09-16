@@ -1,14 +1,11 @@
-const CACHE='mausam-v6';
+const CACHE='mausam-v7';
 const ASSETS=['./','./index.html','./style.css','./app.js','./api-compat.js','./enhancements.js','./resilience.js','./districts.js','./intelligence.js','./national.js','./manifest.json'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!=='mausam-v6').map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
  if(event.request.method!=='GET')return;
  event.respondWith(fetch(event.request).then(response=>{
-   if(event.request.url.startsWith(self.location.origin)&&response.ok){
-     const copy=response.clone();
-     caches.open(CACHE).then(cache=>cache.put(event.request,copy)).catch(()=>{});
-   }
+   if(event.request.url.startsWith(self.location.origin)&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy)).catch(()=>{})}
    return response;
  }).catch(()=>caches.match(event.request).then(cached=>cached||caches.match('./'))));
 });
