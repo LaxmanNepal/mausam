@@ -45,3 +45,24 @@ button:disabled{opacity:.55;cursor:not-allowed}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* Smart weather tools */
+.quick-tools,.today-insight{overflow:hidden}
+.tool-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tool-btn{min-height:92px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.62);color:var(--text);cursor:pointer;padding:13px;text-align:left;font-weight:800;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.tool-btn:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#b8cdf5}
+.tool-btn:first-letter{font-size:24px}
+.tool-btn span,.tool-btn small{display:block}
+.tool-btn span{margin-top:5px}
+.tool-btn small{color:var(--muted);font-weight:500;font-size:11px;margin-top:2px}
+.tool-btn.loading{animation:pulse .8s ease-in-out infinite}
+.insight-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.insight-grid article{display:flex;gap:11px;padding:14px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.55)}
+.insight-grid article>span{font-size:26px}
+.insight-grid small,.insight-grid strong,.insight-grid p{display:block}
+.insight-grid small{color:var(--muted);font-size:11px}
+.insight-grid strong{font-size:18px;margin:2px 0}
+.insight-grid p{margin:0;color:var(--muted);font-size:12px}
+@keyframes pulse{50%{transform:scale(.97);opacity:.7}}
+@media(max-width:760px){.tool-grid,.insight-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.tool-grid,.insight-grid{grid-template-columns:1fr 1fr}.tool-btn{min-height:84px;padding:10px}.insight-grid article{padding:11px;gap:8px}}
