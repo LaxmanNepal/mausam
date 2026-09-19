@@ -1,4 +1,4 @@
-const CACHE='mausam-v19';
+const CACHE='mausam-v20';
 const CORE_ASSETS=[
   './',
   './index.html',
@@ -18,6 +18,7 @@ const CORE_ASSETS=[
   './features.js',
   './travel.js',
   './mountain.js',
+  './farmer.js',
   './manifest.json'
 ];
 const OPTIONAL_ASSETS=[
