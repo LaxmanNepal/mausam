@@ -1,1 +1,18 @@
-{"name":"मौसम — नेपालको स्मार्ट मौसम","short_name":"मौसम","lang":"ne","start_url":"./","display":"standalone","theme_color":"#1769ff","background_color":"#f4f8ff","description":"नेपालका स्थानहरूको स्मार्ट मौसम जानकारी","icons":[]}
+{
+  "name": "मौसम — नेपालको स्मार्ट मौसम",
+  "short_name": "मौसम",
+  "lang": "ne",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1769ff",
+  "background_color": "#f4f8ff",
+  "description": "नेपालका स्थानहरूको स्मार्ट मौसम जानकारी — तापक्रम, वर्षा, हावा, वायु गुणस्तर र पूर्वानुमान।",
+  "categories": [
+    "weather",
+    "utilities"
+  ],
+  "prefer_related_applications": false
+}
