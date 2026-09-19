@@ -66,3 +66,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 @keyframes pulse{50%{transform:scale(.97);opacity:.7}}
 @media(max-width:760px){.tool-grid,.insight-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:420px){.tool-grid,.insight-grid{grid-template-columns:1fr 1fr}.tool-btn{min-height:84px;padding:10px}.insight-grid article{padding:11px;gap:8px}}
+
+/* v17 smart safety + location UX */
+.weather-alert{border-left:4px solid var(--primary);transition:.25s}.weather-alert-active{border-left-color:#e67e22;background:rgba(255,248,238,.92)}.weather-alert-active h2{color:#b45309}.weather-alert p{margin:4px 0 0}.tool-btn:focus-visible{outline-offset:3px}@media(max-width:520px){.weather-alert{padding:13px}.weather-alert .section-head{gap:8px}.weather-alert h2{font-size:18px}.weather-alert p{font-size:12px}}
