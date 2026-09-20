@@ -131,3 +131,8 @@ body.dark .map-legend,body.dark .map-tooltip{background:rgba(14,28,47,.96)}
 body.dark .map-weather-animation{mix-blend-mode:screen}
 @media(prefers-reduced-motion:reduce){.map-weather-animation{display:none}}
 @media(max-width:560px){.map-weather-animation{opacity:.8}}
+
+/* v35 radar legend */
+.map-timeline-head{flex-wrap:wrap}
+.map-radar-legend{margin-left:auto;color:var(--muted);font-size:10px;font-weight:800;white-space:nowrap}
+@media(max-width:560px){.map-radar-legend{width:100%;margin-left:0;overflow:hidden;text-overflow:ellipsis}}
