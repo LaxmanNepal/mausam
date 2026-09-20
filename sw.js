@@ -1,4 +1,4 @@
-const CACHE='mausam-v28';
+const CACHE='mausam-v30';
 const CORE_ASSETS=[
   './',
   './index.html',
