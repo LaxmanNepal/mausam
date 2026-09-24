@@ -1,10 +1,10 @@
-const CACHE='mausam-v37';
+const CACHE='mausam-v38';
 const CORE_ASSETS=[
   './','./index.html','./style.css','./cities.css','./datetime.css',
   './app.js','./weather-cache.js','./api-compat.js','./nepali-clock.js',
   './cities.js','./enhancements.js','./resilience.js','./districts.js',
   './intelligence.js','./national.js','./features.js','./nepal.js',
-  './homepage-alerts.js','./homepage-order.js','./travel.js','./mountain.js','./farmer.js',
+  './homepage-alerts.js','./homepage-order.js','./dhm-status.js','./travel.js','./mountain.js','./farmer.js',
   './hydrology-data.js','./alert-engine.js','./notifications.js','./alert-monitor.js',
   './alert-history.js','./notification-center.js','./data-health.js',
   './alert-center.css','./alerts.css','./alerts.js','./alert-page.html',
