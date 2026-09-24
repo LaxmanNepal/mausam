@@ -1,0 +1,1 @@
+(()=>{'use strict';const run=e=>{try{const d=e.detail||{},alerts=MausamAlerts.evaluate(d.data,{lat:d.lat,lon:d.lon,name:d.name});alerts.forEach(a=>{if(MausamAlerts.publish(a))MausamAlerts.notify(a)})}catch{}};window.addEventListener('mausam-weather-loaded',run)})();
