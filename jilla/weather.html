@@ -25,12 +25,27 @@ async function load(){
   const signals=[];const rain=Math.max(...(h.precipitation_probability||[]).slice(0,24));const gust=Math.max(...(h.wind_gusts_10m||[]).slice(0,24));const temp=Math.max(...(h.temperature_2m||[]).slice(0,24));
   if(rain>=90)signals.push('🔴 भारी वर्षाको सम्भावना उच्च');else if(rain>=70)signals.push('🟠 वर्षाको सम्भावना उच्च');
   if(gust>=60)signals.push('🟠 तीव्र हावाको संकेत');if(temp>=40)signals.push('🟠 अत्यधिक गर्मीको संकेत');if(!signals.length)signals.push('🟢 हाल उपलब्ध पूर्वानुमानमा प्रमुख स्थानीय संकेत भेटिएन।');
-  document.getElementById('signals').innerHTML=signals.map(x=>'<p>'+x+'</p>').join('');
-  const hydro=await window.HydrologyData?.district?.(name)||{rainfall:[],rivers:[]};
+  document.getElementById('signals').innerHTML='<div class="notice"><b>🧠 Model Weather Signal</b><br>'+signals.map(x=>esc(x)).join('<br>')+'<br><small>Open-Meteo आधारित संकेत हो; सरकारी DHM warning को रूपमा प्रस्तुत गरिएको छैन।</small></div>';
+  const hydro=await window.HydrologyData?.district?.(name)||{rainfall:[],rivers:[],source:'DHM',thresholds:{}};
   const rainRows=hydro.rainfall||[], riverRows=hydro.rivers||[];
+  const riverClass=r=>{
+    const nums=r.slice(4,7).map(v=>parseFloat(String(v).replace(/,/g,'')));
+    const wl=nums[0],wr=nums[1],dl=nums[2];
+    if(Number.isFinite(wl)&&Number.isFinite(dl)&&wl>=dl)return 'danger';
+    if(Number.isFinite(wl)&&Number.isFinite(wr)&&wl>=wr)return 'warning';
+    const t=r.join(' ').toLocaleLowerCase('ne');
+    if(/danger|खतरा|critical/.test(t))return 'danger';
+    if(/warning|चेतावनी/.test(t))return 'warning';
+    return 'normal';
+  };
+  const riverLabel=x=>riverClass(x)==='danger'?'🔴 खतरा स्तर':riverClass(x)==='warning'?'🟠 चेतावनी स्तर':'🟢 सामान्य/तल स्तर';
+  const riverHtml=riverRows.slice(0,8).map(r=>'<div class="notice"><b>'+riverLabel(r)+'</b><br>'+r.map(esc).join(' · ')+'</div>').join('');
+  const rainHtml=rainRows.slice(0,8).map(r=>'<div class="notice">'+r.map(esc).join(' · ')+'</div>').join('');
   document.getElementById('hydroStatus').innerHTML=(rainRows.length||riverRows.length)
-    ? '<div class="grid"><div class="metric"><span>🌧️ DHM वर्षा स्टेशन</span><b>'+rainRows.length+'</b></div><div class="metric"><span>🌊 DHM नदी स्टेशन</span><b>'+riverRows.length+'</b></div></div>'+((rainRows.length)?'<h3>🌧️ वर्षा</h3>'+rainRows.slice(0,5).map(r=>'<div class="notice">'+r.map(esc).join(' · ')+'</div>').join(''):'')+((riverRows.length)?'<h3>🌊 नदी</h3>'+riverRows.slice(0,5).map(r=>'<div class="notice">'+r.map(esc).join(' · ')+'</div>').join(''):'')
-    : '<div class="notice">ℹ️ DHM को उपलब्ध तालिकाबाट यो जिल्लाको स्टेशन भेटिएन। यो भाग आधिकारिक DHM स्रोतमा निर्भर छ।</div>';
+    ? '<div class="grid"><div class="metric"><span>🌧️ DHM वर्षा स्टेशन</span><b>'+rainRows.length+'</b></div><div class="metric"><span>🌊 DHM नदी स्टेशन</span><b>'+riverRows.length+'</b></div></div>'+
+      '<div class="notice"><b>🏛️ Official DHM Monitoring</b><br>यो भाग DHM को rainfall/river watch तालिकाबाट आएको हो। यो पृष्ठको Open-Meteo model संकेतभन्दा अलग राखिएको official monitoring layer हो.<br><small>वर्षा thresholds: 60 / 80 / 100 / 120 / 140 mm (1h / 3h / 6h / 12h / 24h) · <a href="https://www.dhm.gov.np/hydrology/rainfall-watch-map" target="_blank" rel="noopener">DHM Rainfall Watch ↗</a> · <a href="https://www.dhm.gov.np/hydrology/river-watch" target="_blank" rel="noopener">DHM River Watch ↗</a></small></div>'+
+      (rainRows.length?'<h3>🌧️ DHM वर्षा</h3>'+rainHtml:'')+(riverRows.length?'<h3>🌊 DHM नदी</h3>'+riverHtml:'')
+    : '<div class="notice">ℹ️ DHM को उपलब्ध तालिकाबाट यो जिल्लाको स्टेशन भेटिएन। आधिकारिक DHM पृष्ठबाट प्रत्यक्ष जाँच गर्न सकिन्छ: <a href="https://www.dhm.gov.np/" target="_blank" rel="noopener">DHM ↗</a></div>';
   const alerts=window.MausamAlerts?.evaluate(d,{name,lat:p.lat,lon:p.lon})||[];
   const unique=alerts.filter((a,i,self)=>i===self.findIndex(x=>x.type===a.type&&x.time===a.time)).slice(0,6);
   document.getElementById('localAlerts').innerHTML=unique.length
