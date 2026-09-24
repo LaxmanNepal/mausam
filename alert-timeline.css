@@ -7,5 +7,3 @@
 #alertRefreshNow{border:1px solid var(--border,#dfe6f2);background:var(--surface,#fff);cursor:pointer}#alertRefreshNow:disabled{opacity:.6;cursor:wait}
 
 #officialAlertStrip{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}#officialAlertStrip:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.06)}#officialAlertStrip:focus-visible{outline:3px solid currentColor;outline-offset:2px}
-
-.alert-detail-source-meta{margin:8px 0 0;font-size:.82rem;opacity:.78}.alert-detail-source-meta::first-letter{font-weight:700}
