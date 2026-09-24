@@ -1,6 +1,6 @@
-const CACHE='mausam-v42';
+const CACHE='mausam-v43';
 const CORE_ASSETS=[
-  './','./index.html','./style.css','./cities.css','./datetime.css',
+  './','./index.html','./style.css','./cities.css','./datetime.css','./alert-timeline.css',
   './app.js','./weather-cache.js','./api-compat.js','./nepali-clock.js',
   './cities.js','./enhancements.js','./resilience.js','./districts.js',
   './intelligence.js','./national.js','./features.js','./nepal.js',
