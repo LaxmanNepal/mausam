@@ -2,8 +2,9 @@
 const DIRECT='https://www.dhm.gov.np';
 const PROXY='https://api.allorigins.win/raw?url=';
 const THRESHOLDS={oneHour:60,threeHour:80,sixHour:100,twelveHour:120,twentyFourHour:140};
+let LAST_SOURCE='UNAVAILABLE',LAST_CHECKED=null;
 function esc(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
-async function get(url){try{const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);return await r.text()}catch(e){const r=await fetch(PROXY+encodeURIComponent(url),{cache:'no-store'});if(!r.ok)throw e;return await r.text()}}
+async function get(url){try{const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);LAST_SOURCE='LIVE';LAST_CHECKED=new Date().toISOString();return await r.text()}catch(e){const r=await fetch(PROXY+encodeURIComponent(url),{cache:'no-store'});if(!r.ok)throw e;LAST_SOURCE='PROXY';LAST_CHECKED=new Date().toISOString();return await r.text()}}
 function doc(html){return new DOMParser().parseFromString(html,'text/html')}
 function clean(s){return(s||'').replace(/\s+/g,' ').trim()}
 function tables(d){return[...d.querySelectorAll('table')].filter(t=>t.querySelectorAll('tr').length>1)}
