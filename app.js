@@ -35,3 +35,5 @@ function bind(){bindNav();bindMain();bindAll();renderSavedCities();updateNationa
 window.load=load;window.search=search;window.loadWeather=load;window.searchWeather=search;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })();
+/* National alert layer: loaded lazily so existing weather UI remains independent. */
+(()=>{const load=s=>new Promise((ok,no)=>{const x=document.createElement('script');x.src=s;x.onload=ok;x.onerror=no;document.head.appendChild(x)});Promise.resolve().then(()=>load('alert-engine.js')).then(()=>load('notifications.js')).then(()=>{const hook=e=>{try{const d=e.detail||{},alerts=window.MausamAlerts.evaluate(d.data,{name:d.name,lat:d.lat,lon:d.lon});alerts.forEach(a=>{if(window.MausamAlerts.publish(a))window.MausamAlerts.notify(a)})}catch{}};window.addEventListener('mausam-weather-loaded',hook);window.__mausamAlertHook=hook}).catch(()=>{})})();
