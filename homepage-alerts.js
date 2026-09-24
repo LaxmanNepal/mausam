@@ -1,0 +1,52 @@
+(()=>{'use strict';
+const P=window.NEPAL_WEATHER_POINTS||[];
+const ALERTS=[
+ ['🌦️','मौसम अलर्ट','समग्र मौसम संकेत','weather-alert/'],
+ ['🌊','नदी अलर्ट','River discharge','rivers-alert/'],
+ ['🌊','बाढी अलर्ट','Flood signal','flood-alert/'],
+ ['⚡','चट्याङ अलर्ट','Convective potential','lightning-alert/'],
+ ['⚡','Lightning Alert','Alternate route','light-alert/'],
+ ['⛰️','पहिरो अलर्ट','Rain-trigger signal','landslide-alert/'],
+ ['☔','भारी वर्षा','Rain probability','rain-alert/'],
+ ['💨','हावा अलर्ट','Wind & gust','wind-alert/'],
+ ['🌡️','गर्मी अलर्ट','Heat signal','heat-alert/'],
+ ['😷','वायु गुणस्तर','AQI / PM2.5','air-alert/'],
+ ['☀️','UV अलर्ट','UV index','uv-alert/']
+];
+const $=id=>document.getElementById(id),nf=v=>Number.isFinite(Number(v))?new Intl.NumberFormat('ne-NP',{maximumFractionDigits:0}).format(Math.round(Number(v))):'—';
+function insert(){
+ if($('allNepalAlerts'))return;
+ const s=document.createElement('section');s.id='allNepalAlerts';s.className='card homepage-alerts';
+ s.innerHTML='<div class="section-head"><div><h2>🚨 नेपालका सबै Live Alert</h2><p class="muted">सबै alert pages एउटै ठाउँबाट खोल्नुहोस्। तलको राष्ट्रिय डाटाबाट जिल्ला अनुसार संकेत पनि हेर्नुहोस्।</p></div><span id="alertLiveBadge" class="pill">डाटा लोड हुँदैछ</span></div><div class="alert-page-grid">'+ALERTS.map(a=>'<a class="alert-page-card" href="'+a[3]+'"><span>'+a[0]+'</span><div><b>'+a[1]+'</b><small>'+a[2]+'</small></div><strong>→</strong></a>').join('')+'</div><div class="national-alert-controls"><div class="alert-control-head"><b>🇳🇵 जिल्ला Live Alert</b><span id="districtAlertMeta" class="muted">स्क्यान हुँदैछ…</span></div><div class="alert-slider-row"><label for="riskSlider">न्यूनतम जोखिम <output id="riskValue">०</output></label><input id="riskSlider" type="range" min="0" max="100" value="0" step="5"><label for="countSlider">जिल्ला <output id="countValue">७७</output></label><input id="countSlider" type="range" min="10" max="77" value="77" step="1"></div><div class="alert-sort-row"><button data-sort="risk" class="active">⚠️ जोखिम</button><button data-sort="rain">☔ वर्षा</button><button data-sort="wind">💨 हावा</button><button data-sort="temp">🌡️ तापक्रम</button><button data-sort="name">🔤 जिल्ला</button></div><div id="districtAlertGrid" class="district-alert-grid"><div class="national-alert-empty">७७ जिल्लाको live डाटा सङ्कलन हुँदैछ…</div></div><p class="national-alert-note">ℹ️ जिल्ला मौसम संकेत Open-Meteo पूर्वानुमानमा आधारित छन्। यी सरकारी चेतावनी होइनन्। आधिकारिक नदी/वर्षा अवस्थाका लागि DHM Watch स्रोत प्रयोग गरिएको छ।</p></div>';
+ $('districtExplorer')?.insertAdjacentElement('afterend',s);
+ document.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{sort=b.dataset.sort;document.querySelectorAll('[data-sort]').forEach(x=>x.classList.toggle('active',x===b));render()});
+ $('riskSlider').oninput=()=>{ $('riskValue').textContent=nf($('riskSlider').value);render() };
+ $('countSlider').oninput=()=>{ $('countValue').textContent=nf($('countSlider').value);render() };
+}
+let rows=[],sort='risk';
+function risk(x){let r=0;if((x.rain??0)>=90)r+=45;else if((x.rain??0)>=70)r+=30;else if((x.rain??0)>=50)r+=15;if((x.gust??0)>=60)r+=30;else if((x.gust??0)>=45)r+=18;if((x.temp??0)>=40)r+=25;else if((x.temp??0)>=35)r+=15;if(x.riverDanger)r+=50;else if(x.riverWarning)r+=30;return Math.min(100,r)}
+function level(r){return r>=70?'critical':r>=45?'warning':r>=20?'advisory':'normal'}
+function render(){
+ const g=$('districtAlertGrid');if(!g)return;
+ const min=Number($('riskSlider').value),count=Number($('countSlider').value);
+ let a=rows.filter(x=>x.risk>=min);
+ const cmp={risk:(a,b)=>b.risk-a.risk,rain:(a,b)=>(b.rain??-1)-(a.rain??-1),wind:(a,b)=>(b.gust??-1)-(a.gust??-1),temp:(a,b)=>(b.temp??-999)-(a.temp??-999),name:(a,b)=>a.name.localeCompare(b.name,'ne')};
+ a.sort(cmp[sort]||cmp.risk);a=a.slice(0,count);
+ if(!a.length){g.innerHTML='<div class="national-alert-empty">यो जोखिम सीमा अनुसार जिल्ला भेटिएन। slider घटाउनुहोस्।</div>';return}
+ g.innerHTML=a.map(x=>{const l=level(x.risk),river=x.riverDanger?'🌊 नदी खतरा':x.riverWarning?'🌊 नदी चेतावनी':'';return '<button class="district-alert-card '+l+'" data-name="'+x.name+'"><div class="district-alert-top"><b>'+x.name+'</b><span>'+({critical:'🔴',warning:'🟠',advisory:'🟡',normal:'🟢'}[l])+' '+nf(x.risk)+'</span></div><div class="district-alert-data"><span>🌧️ '+nf(x.rain)+'%</span><span>💨 '+nf(x.gust)+' km/h</span><span>🌡️ '+nf(x.temp)+'°C</span></div><small>'+river+(river?' · ':'')+({critical:'गम्भीर संकेत',warning:'चेतावनी संकेत',advisory:'सावधानी',normal:'सामान्य'}[l])+'</small></button>'}).join('');
+ g.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>location.href='jilla/weather.html?name='+encodeURIComponent(b.dataset.name));
+ $('districtAlertMeta').textContent=rows.length+' जिल्ला · '+a.length+' देखाइँदै · '+new Date().toLocaleTimeString('ne-NP',{hour:'numeric',minute:'2-digit'});
+}
+async function scan(){
+ if(!P.length){$('alertLiveBadge').textContent='डाटा उपलब्ध छैन';return}
+ try{
+  const groups=[];for(let i=0;i<P.length;i+=15)groups.push(P.slice(i,i+15));rows=[];
+  for(const group of groups){const u=new URL('https://api.open-meteo.com/v1/forecast');u.search=new URLSearchParams({latitude:group.map(p=>p[1]).join(','),longitude:group.map(p=>p[2]).join(','),timezone:'Asia/Kathmandu',forecast_days:'1',current:'temperature_2m,wind_gusts_10m,wind_speed_10m',daily:'precipitation_probability_max'});const j=await(await fetch(u)).json(),a=Array.isArray(j)?j:[j];group.forEach((p,i)=>{const w=a[i]||{},x={name:p[0],lat:p[1],lon:p[2],temp:w.current?.temperature_2m,rain:w.daily?.precipitation_probability_max?.[0],gust:w.current?.wind_gusts_10m};x.risk=risk(x);rows.push(x)});render();await new Promise(r=>setTimeout(r,100))}
+  let h={};try{h=await window.HydrologyData?.national?.()||{}}catch{}
+  rows=rows.map(x=>{const rs=(h.rivers||[]).filter(r=>r.some(c=>String(c).toLocaleLowerCase('ne').includes(x.name.toLocaleLowerCase('ne'))));x.riverDanger=rs.some(r=>/danger|खतरा|critical/i.test(r.join(' ')));x.riverWarning=!x.riverDanger&&rs.some(r=>/warning|चेतावनी/i.test(r.join(' ')));x.risk=risk(x);return x});render();
+  $('alertLiveBadge').textContent='🟢 Live · '+rows.length+'/77';try{localStorage.setItem('mausam_home_alerts_v1',JSON.stringify({at:Date.now(),rows}))}catch{}
+ }catch(e){$('alertLiveBadge').textContent='⚠️ पुनः प्रयास आवश्यक'}
+}
+function boot(){insert();try{const c=JSON.parse(localStorage.getItem('mausam_home_alerts_v1')||'null');if(c?.rows?.length){rows=c.rows;render()}}catch{}scan();setInterval(scan,15*60*1000)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
