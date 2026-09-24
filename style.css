@@ -144,3 +144,6 @@ body.dark .map-weather-animation{mix-blend-mode:screen}
 
 /* Hide utility live clock */
 #liveClock{display:none!important}
+
+/* v37 official DHM status */
+.dhm-status{border:1px solid var(--line);background:rgba(255,255,255,.64);border-radius:18px;padding:12px;margin:10px 0}.dhm-status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.dhm-status-item{border:1px solid var(--line);border-radius:13px;padding:9px}.dhm-status-item small,.dhm-status-item b{display:block}.dhm-status-item small{color:var(--muted);font-size:10px}.dhm-status-item b{font-size:15px;margin-top:2px}.dhm-status-note{font-size:11px;color:var(--muted);margin:9px 0 0}.dhm-status a{color:var(--primary);font-weight:800;text-decoration:none}@media(max-width:650px){.dhm-status-grid{grid-template-columns:repeat(2,1fr)}}
