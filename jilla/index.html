@@ -55,7 +55,7 @@ async function resolve(name){
   const r=await fetch(u,{headers:{Accept:'application/json'}});
   const j=await r.json();
   if(!j[0]) throw new Error('not-found');
-  location.href='../?lat='+encodeURIComponent(j[0].lat)+'&lon='+encodeURIComponent(j[0].lon)+'&name='+encodeURIComponent(name);
+  location.href='weather.html?name='+encodeURIComponent(name);
  }catch(e){status.textContent='स्थान भेटिएन। कृपया जिल्ला नाम फेरि खोज्नुहोस्।';}
 }
 input.addEventListener('input',()=>render(input.value));
