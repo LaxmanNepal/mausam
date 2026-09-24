@@ -14,5 +14,23 @@
     "weather",
     "utilities"
   ],
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "अलर्ट केन्द्र",
+      "url": "./alerts/"
+    },
+    {
+      "name": "Notification",
+      "url": "./notifications/"
+    },
+    {
+      "name": "वर्षा",
+      "url": "./barsha/"
+    },
+    {
+      "name": "नदीहरू",
+      "url": "./nadiharu/"
+    }
+  ]
 }
