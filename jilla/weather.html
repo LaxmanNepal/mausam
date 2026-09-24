@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ne"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>जिल्ला मौसम — मौसम</title><meta name="description" content="नेपालको जिल्लाको स्थानीय मौसम, वर्षा, हावा र मौसम संकेत।"><link rel="stylesheet" href="../style.css">
+<style>
+.detail{max-width:1100px;margin:auto;padding:24px 18px 60px}.hero,.panel{border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow);padding:24px}.hero h1{margin:0;font-size:clamp(28px,6vw,46px)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}.metric{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.72)}.metric b{display:block;font-size:28px}.muted{color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.actions a{padding:11px 15px;border:1px solid var(--line);border-radius:14px;text-decoration:none;color:inherit;font-weight:700}
+</style></head><body>
+<header class="topbar"><div class="nav"><a class="brand" href="../"><span class="brand-icon">🌦️</span><span><b>मौसम</b><small>नेपालको स्मार्ट मौसम</small></span></a><div class="nav-search"><span>⌕</span><input id="navSearch" type="search" placeholder="शहर / जिल्ला खोज्नुहोस्…"><button id="navSearchClear">×</button></div><nav class="header-hydro-links"><a href="../barsha/">🌧️ वर्षा</a><a href="../nadiharu/">🌊 नदीहरू</a><a href="../ahileko-mausam/">🌦️ अहिलेको मौसम</a></nav><div class="nav-actions"><a class="nav-all" href="../jilla/" style="text-decoration:none">🇳🇵 जिल्ला</a><a class="icon-btn" href="../" style="display:grid;place-items:center;text-decoration:none">⌂</a></div></div></header>
+<main class="detail"><section class="hero"><p class="muted">नेपाल जिल्ला मौसम</p><h1 id="name">जिल्ला मौसम</h1><p id="summary" class="muted">📡 मौसम डाटा लोड हुँदैछ…</p><div id="metrics" class="grid"></div><div id="actions" class="actions"></div></section><section class="panel" style="margin-top:18px"><h2>⚠️ मौसम संकेत</h2><div id="signals" class="muted">विश्लेषण हुँदैछ…</div></section></main>
+<script>
+const qs=new URLSearchParams(location.search), requested=qs.get('name')||'';
+const norm=s=>s.trim().toLocaleLowerCase('ne');
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+async function geo(name){const u='https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=ne&q='+encodeURIComponent(name+', Nepal');const r=await fetch(u,{headers:{Accept:'application/json'}});const j=await r.json();if(!j[0])throw Error('not-found');return {lat:+j[0].lat,lon:+j[0].lon};}
+async function load(){
+ if(!requested){location.href='../jilla/';return}
+ const name=decodeURIComponent(requested);document.title=name+' मौसम — मौसम';document.getElementById('name').textContent='🇳🇵 '+name+' को मौसम';
+ try{
+  const p=await geo(name), u='https://api.open-meteo.com/v1/forecast?latitude='+p.lat+'&longitude='+p.lon+'&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m,wind_gusts_10m&hourly=precipitation_probability,precipitation,wind_gusts_10m,temperature_2m&forecast_days=2&timezone=Asia%2FKathmandu';
+  const d=await (await fetch(u)).json(), c=d.current||{}, h=d.hourly||{};
+  document.getElementById('summary').textContent='आजको स्थानीय मौसम • '+p.lat.toFixed(3)+'°, '+p.lon.toFixed(3)+'°';
+  const metrics=[['🌡️ तापक्रम',Math.round(c.temperature_2m)+'°C'],['🤒 महसुस',Math.round(c.apparent_temperature)+'°C'],['💧 आर्द्रता',Math.round(c.relative_humidity_2m)+'%'],['🌧️ वर्षा',Number(c.precipitation||0).toFixed(1)+' mm'],['💨 हावा',Math.round(c.wind_speed_10m||0)+' km/h'],['🌬️ झोका',Math.round(c.wind_gusts_10m||0)+' km/h']];
+  document.getElementById('metrics').innerHTML=metrics.map(x=>'<div class="metric"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('');
+  const signals=[];const rain=Math.max(...(h.precipitation_probability||[]).slice(0,24));const gust=Math.max(...(h.wind_gusts_10m||[]).slice(0,24));const temp=Math.max(...(h.temperature_2m||[]).slice(0,24));
+  if(rain>=90)signals.push('🔴 भारी वर्षाको सम्भावना उच्च');else if(rain>=70)signals.push('🟠 वर्षाको सम्भावना उच्च');
+  if(gust>=60)signals.push('🟠 तीव्र हावाको संकेत');if(temp>=40)signals.push('🟠 अत्यधिक गर्मीको संकेत');if(!signals.length)signals.push('🟢 हाल उपलब्ध पूर्वानुमानमा प्रमुख स्थानीय संकेत भेटिएन।');
+  document.getElementById('signals').innerHTML=signals.map(x=>'<p>'+x+'</p>').join('');
+  document.getElementById('actions').innerHTML='<a href="../?lat='+p.lat+'&lon='+p.lon+'&name='+encodeURIComponent(name)+'">मुख्य मौसम पृष्ठ</a><a href="../barsha/">वर्षा Watch</a><a href="../nadiharu/">नदी Watch</a>';
+ }catch(e){document.getElementById('summary').textContent='डाटा लोड हुन सकेन। फेरि प्रयास गर्नुहोस्।';document.getElementById('signals').textContent='स्थान वा मौसम सेवा उपलब्ध नभएमा केही समयपछि पुनः प्रयास गर्नुहोस्।'}
+}
+document.getElementById('navSearchClear').onclick=()=>document.getElementById('navSearch').value='';
+load();
+</script></body></html>
