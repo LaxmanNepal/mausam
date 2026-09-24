@@ -1,1 +1,68 @@
-<!doctype html><html lang="ne"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>नेपाल जिल्ला मौसम — मौसम</title><meta name="description" content="नेपालका ७७ जिल्लाको मौसम, वर्षा, हावा, UV र मौसम संकेत।"><link rel="stylesheet" href="../style.css"></head><body><main><section class="card" style="margin:18px"><h1>🇳🇵 ७७ जिल्ला मौसम</h1><p class="muted">जिल्ला छान्नुहोस् र मौसम हेर्नुहोस्।</p><div id="districtList" class="district-grid"></div></section></main><script src="../districts.js"></script><script>document.addEventListener('DOMContentLoaded',()=>{const d=window.NEPAL_DISTRICTS||window.districts||[];const list=document.getElementById('districtList');const a=Array.isArray(d)?d:Object.entries(d).map(([name,x])=>({name,...x}));list.innerHTML=a.map(x=>'<a class="district-card" href="../?place='+encodeURIComponent(x.name||x[0]||'')+'">'+(x.name||x[0]||'जिल्ला')+'</a>').join('')||'<p>जिल्ला डाटा लोड भएन।</p>'})</script></body></html>
+<!doctype html>
+<html lang="ne">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>नेपालका ७७ जिल्ला मौसम — मौसम</title>
+<meta name="description" content="नेपालका ७७ जिल्लामध्ये कुनै जिल्ला खोजेर स्थानीय मौसम, वर्षा, हावा र मौसम संकेत हेर्नुहोस्।">
+<link rel="stylesheet" href="../style.css">
+<style>
+.jilla-page{max-width:1100px;margin:auto;padding:24px 18px 60px}
+.jilla-hero{padding:26px;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow)}
+.jilla-hero h1{margin:0 0 6px;font-size:clamp(26px,5vw,42px)}
+.jilla-search{display:flex;gap:10px;margin-top:20px}
+.jilla-search input{flex:1;min-width:0;padding:13px 16px;border:1px solid var(--line);border-radius:15px;background:#fff;outline:0}
+.jilla-search button{padding:0 18px;border:0;border-radius:15px;background:var(--primary);color:#fff;font-weight:800;cursor:pointer}
+.jilla-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:20px}
+.jilla-card{padding:16px;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.8);transition:.18s}
+.jilla-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--primary)}
+.jilla-card b,.jilla-card small{display:block}.jilla-card small{color:var(--muted);margin-top:4px}
+.jilla-status{margin-top:14px;color:var(--muted);min-height:24px}
+@media(max-width:800px){.header-hydro-links{display:none}.nav{height:auto;min-height:68px;flex-wrap:wrap;padding-top:9px;padding-bottom:9px}.nav-search{order:3;flex-basis:100%;max-width:none;margin:0}.jilla-page{padding-top:18px}.jilla-search button{padding:0 14px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+<div class="nav">
+<a class="brand" href="../"><span class="brand-icon">🌦️</span><span><b>मौसम</b><small>नेपालको स्मार्ट मौसम</small></span></a>
+<div class="nav-search"><span>⌕</span><input id="navSearch" type="search" placeholder="शहर / जिल्ला खोज्नुहोस्…" autocomplete="off"><button id="navSearchClear" aria-label="खोजी हटाउनुहोस्">×</button></div>
+<nav class="header-hydro-links"><a href="../barsha/">🌧️ वर्षा</a><a href="../nadiharu/">🌊 नदीहरू</a><a href="../ahileko-mausam/">🌦️ अहिलेको मौसम</a></nav>
+<div class="nav-actions"><a class="nav-all" href="../alerts/" style="text-decoration:none">🚨 अलर्ट</a><a class="icon-btn" href="../" title="मुख्य पृष्ठ" style="display:grid;place-items:center;text-decoration:none">⌂</a></div>
+</div>
+</header>
+<main class="jilla-page">
+<section class="jilla-hero">
+<h1>🇳🇵 ७७ जिल्ला मौसम</h1>
+<p class="muted">जिल्ला छान्नुहोस् वा खोज्नुहोस्। छनोट गरेपछि त्यस जिल्लाको स्थानबाट मौसम लोड हुन्छ।</p>
+<div class="jilla-search"><input id="districtSearch" type="search" placeholder="जस्तै: मकवानपुर, काठमाडौं, झापा…" autocomplete="off"><button id="searchBtn">मौसम हेर्नुहोस्</button></div>
+<div id="status" class="jilla-status"></div>
+<div id="districtList" class="jilla-grid"></div>
+</section>
+</main>
+<script src="../districts.js"></script>
+<script>
+(function(){
+const d=window.NEPAL_DISTRICTS||[], list=document.getElementById('districtList'), input=document.getElementById('districtSearch'), status=document.getElementById('status');
+function render(q){
+ const term=(q||'').trim().toLocaleLowerCase('ne');
+ const items=d.filter(x=>!term||x.toLocaleLowerCase('ne').includes(term));
+ list.innerHTML=items.map(x=>'<a href="#" class="jilla-card" data-name="'+x.replace(/"/g,'&quot;')+'"><b>📍 '+x+'</b><small>मौसम हेर्नुहोस् →</small></a>').join('')||'<p class="muted">जिल्ला भेटिएन।</p>';
+ list.querySelectorAll('[data-name]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();resolve(a.dataset.name)}));
+}
+async function resolve(name){
+ status.textContent='📡 '+name+' को स्थान खोज्दै…';
+ try{
+  const u='https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=ne&q='+encodeURIComponent(name+', Nepal');
+  const r=await fetch(u,{headers:{Accept:'application/json'}});
+  const j=await r.json();
+  if(!j[0]) throw new Error('not-found');
+  location.href='../?lat='+encodeURIComponent(j[0].lat)+'&lon='+encodeURIComponent(j[0].lon)+'&name='+encodeURIComponent(name);
+ }catch(e){status.textContent='स्थान भेटिएन। कृपया जिल्ला नाम फेरि खोज्नुहोस्।';}
+}
+input.addEventListener('input',()=>render(input.value));
+document.getElementById('searchBtn').onclick=()=>{const q=input.value.trim();if(q)resolve(q)};
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('searchBtn').click()}});
+document.getElementById('navSearchClear').onclick=()=>{document.getElementById('navSearch').value=''};
+render('');
+})();
+</script>
+</body></html>
