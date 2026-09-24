@@ -1,4 +1,4 @@
-const CACHE='mausam-v35';
+const CACHE='mausam-v36';
 const CORE_ASSETS=[
   './',
   './index.html',
@@ -19,6 +19,10 @@ const CORE_ASSETS=[
   './travel.js',
   './mountain.js',
   './farmer.js',
+  './alert-engine.js',
+  './notifications.js',
+  './alert-monitor.js',
+  './alert-center.css',
   './map.js',
   './map.html',
   './manifest.json'
@@ -50,7 +54,13 @@ const OPTIONAL_ASSETS=[
   './rain-alert/',
   './rain-alert/index.html',
   './uv-alert/',
-  './uv-alert/index.html'
+  './uv-alert/index.html',
+  './notifications/',
+  './notifications/index.html',
+  './alerts/history/',
+  './alerts/history/index.html',
+  './jilla/',
+  './jilla/index.html'
 ];
 
 self.addEventListener('install', event => {
