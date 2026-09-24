@@ -3,3 +3,5 @@
 .alert-detail-evidence>b{display:block;margin-bottom:8px}.alert-detail-evidence>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--border,#dfe6f2)}.alert-detail-evidence>div:first-of-type{border-top:0}.alert-detail-evidence span{font-weight:700}.alert-detail-evidence small{opacity:.78;text-align:right}@media(max-width:640px){.alert-detail-evidence>div{display:block}.alert-detail-evidence small{display:block;text-align:left;margin-top:3px}}
 
 #alertNextScan{font-variant-numeric:tabular-nums}.official-alert-strip .section-head{flex-wrap:wrap}
+
+#alertRefreshNow{border:1px solid var(--border,#dfe6f2);background:var(--surface,#fff);cursor:pointer}#alertRefreshNow:disabled{opacity:.6;cursor:wait}
