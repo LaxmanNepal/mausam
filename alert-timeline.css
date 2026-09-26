@@ -5,3 +5,5 @@
 #alertNextScan{font-variant-numeric:tabular-nums}.official-alert-strip .section-head{flex-wrap:wrap}
 
 .alert-timeline-item{cursor:pointer}.alert-timeline-item:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+
+.alert-timeline-filters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.alert-timeline-filters button{border:1px solid var(--line);background:transparent;color:inherit;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer}.alert-timeline-filters button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
